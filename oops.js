@@ -32,8 +32,6 @@ var OOPS = (function() {
 	OOPS._ID_ = 0;
 	OOPS.extend = function(props) {
 		var i;
-		//Disallow these prop names
-		var reserved = ['_statics_', '_constructor_', '_super_'];
 		//Create a new empty function to populate (This is the Class that will be returned)
 		//Note: "_constructor_" will be used as the base if provided)
 		var child = (typeof props._constructor_ == 'function') ? props._constructor_ : function() {};
