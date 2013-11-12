@@ -1,5 +1,5 @@
 /*******************************
-	OOPS Version 1.0.0
+	OOPS Version 1.1.0
 	
     A very simple "Object Oriented Programming Structured" class system for JavaScript
 	
@@ -25,91 +25,56 @@
 	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 	THE SOFTWARE.
 *******************************/
-var OOPS = 
-{
-	_ID_: 0, //Unique ID for doing Class type checks (comparable via typeCheck function)
-    _props_: {}, //A registry of all property names available in this Class (Required for extension)
-	_parent_: null, //A reference to the parent Class
-	disallowedTerms: ['_props_', '_parent_', '_statics_', '_definition_'], //Prevent override of these names (would break the functionality)
-    extend: function (params) //Performs the actual Class creation
-    {   
-        var p = null; //Temporary foreach loop var
-        
-        //Create a new empty function to populate (This is the Class that will be returned, direct descendant of OOPS)
-        var cls = function()
-        { 
-            //If arguments are passed to the function and a _constructor_ method is provided, those arguments will be passed to _constructor_
-			if(typeof this._constructor_ == 'function')
-                this._constructor_.apply(this, arguments); //Apply arguments to the provided constructor
-            if(arguments)
-				this._constructor_ = function() {}; //No constructor provided, create a dummy constructor
-        };
-		
-		//Grant unique class ID
-		cls.prototype._ID_ = (++OOPS._ID_);
-	
-		//Provide other prototypes to the class
-        cls.prototype._props_ = {}; //Gives this new Class access to properties without using individual standard JavaScript prototype overrides
-        cls.prototype._parent_ = this; //Gives new class direct access to the parent
-		
-        //Inherit parent info
-        for(p in this._props_)
-            if(!params[p])
-                params[p] = this._props_[p]; //Only overwrite if it doesn't exist in the new parameters list
-        
-        //For each item in the updated params list
-        for(p in params)
-        {
-            //If the term is not banned
-            if(OOPS.disallowedTerms.indexOf(p) < 0)
-            {
-                //Add the parameter to this new Class instance's prototype
-				cls.prototype[p] = params[p];
-				//Saving all the props in case we need for later, such as binding the functions to a  class itself when we instantiate
-				cls.prototype._props_[p] = params[p];
-            }
-        }
-		
-		//Prep variables for future class extension
-		cls._ID_ = (OOPS._ID_); //Use the ID that was created in the earlier prototype
-        cls.extend = this.extend; //Inherit the extend method from OOPS
-        cls._props_ = params; //Remember all of the properties inherited so far
-		cls._parent_ = this; //Set the class parent to this
-        
-		//Add static content to class, binding functions as needed
-        if(typeof params._statics_ == 'object')
-		{
-			//If a param called _statics_ was provided, it will treat this as a list of static properties for the object
-			for(p in params._statics_)
-			{
-				//As long as the property name is not disallowed
-				if(OOPS.disallowedTerms.indexOf(p) < 0)
-				{
-					//Set the static property onto the Class itself
-					cls[p] = params._statics_[p];
-					//If the property was a function, bind the function to the Class itself
-					if(typeof cls[p] == 'function')
-						cls[p] = cls[p].bind(cls);
-				}
-			}
+var OOPS = (function() {
+	//Constructor
+	function OOPS() {}; //Unique ID for doing Class type checks (comparable via OOPS.typeMatch())
+	//Extender (copy all of the prototypes from parent to child)
+	OOPS._ID_ = 0;
+	OOPS.extend = function(props) {
+		var i;
+		//Disallow these prop names
+		var reserved = ['_statics_', '_constructor_', '_super_'];
+		//Create a new empty function to populate (This is the Class that will be returned)
+		//Note: "_constructor_" will be used as the base if provided)
+		var child = (typeof props._constructor_ == 'function') ? props._constructor_ : function() {};
+		//Child will use provided fields as their prototype
+		child.prototype = (typeof props == 'object') ? props : {};
+		//Child inherits the fields from parent that it doesn't have yet
+		for(i in this.prototype)
+			if(!child.prototype.hasOwnProperty(i))
+				child.prototype[i] = this.prototype[i];
+		//Statics get placed onto the child itself
+		if(child.prototype._statics_) {
+			for(i in child.prototype._statics_)
+				child[i] = child.prototype._statics_[i];
+			//Remove _statics_ from the prototype
+			delete child.prototype._statics_;
 		}
-		//Return the class
-        return cls;
-    }, typeMatch: function (class1, class2)
-	{
+		//Pass down the extend method
+		child.extend = this.extend;
+		//Pass down the _super_ method (if applicable)
+		child.prototype._super_ = child._super_ = (this != OOPS) ? this : null;
+		//Grant unique class ID
+		child.prototype._ID_ = child._ID_ = ++OOPS._ID_;
+		//Return the completed class
+		return child;
+	};
+	OOPS.typeMatch = function(class1, class2) {
 		//If the classes have matching _ID_ fields they are of the same type
+		//Note: Classes have _ID_ as a static and prototype value, use instanceof for strict type testing
 		return (class1._ID_ == class2._ID_);
-	}, descendantOf: function (class1, class2)
-	{
+	};
+	OOPS.descendantOf = function (child, parent) {
 		//Recursively traverse back up until we find a valid ancestor
-		if(class1._parent_)
-		{
-			if(class1._parent_._ID_ == class2._ID_)
+		//Note: Classes have _ID_ as a static and prototype value, use instanceof for strict type testing
+		if(child._super_) {
+			if(child._super_._ID_ == parent._ID_)
 				return true;
 			else
-				return OOPS.descendantOf(class1._parent_, class2); 
+				return OOPS.descendantOf(child._super_, parent); 
 		}
-		else
-			return false;
-	}
-};
+		return false;
+	};
+	//Return
+	return OOPS;
+})();

@@ -72,13 +72,13 @@ var Player = OOPS.extend({
 var Expert = Player.extend({
 	yearsExperience: null,
 	_constructor_: function(name, instrument, yearsExperience) {
-		//Emulate "super()" by running "call()" on the Player's _constructor_ prototype
-		//(Always use the prototype from the preceding parent which contains the function you want to use)
-		Player.prototype._constructor_.call(this, name, instrument);
+		//Emulate "super()" by running "call()" on the Player's _super_ property
+		this._super_.call(this, name, instrument);
 		this.yearsExperience = yearsExperience;
 	},
 	perform: function() {
-		Player.prototype.perform.call(this);
+		//Emulate "super.MethodName()" by digging into the prototype of _super_
+		this._super_.prototype.perform.call(this);
 		print("The expert " + this.instrument.name + " player, " + this.name + ", takes a bow.");
 	}
 });
@@ -87,7 +87,7 @@ var Expert = Player.extend({
 function main()
 {
 	var flutePlayer = new Player("George", new Flute("wooden"));
-	var marimbaPlayer = new Expert("Alex", new Marimba("yarn"));
+	var marimbaPlayer = new Expert("Alex", new Marimba("yarn"), 20);
 
 	print("The amout of players that has been created is " + Player.playerCount + "\n\n");
 	
