@@ -72,13 +72,14 @@ var Player = OOPS.extend({
 var Expert = Player.extend({
 	yearsExperience: null,
 	_constructor_: function(name, instrument, yearsExperience) {
-		//Emulate "super()" by running "call()" on the Player's _super_ property
-		this._super_.call(this, name, instrument);
+		//Emulate "super.methodName()" by running "call()" on the Player's prototype functions
+		Player.prototype._constructor_.call(this, name, instrument);
 		this.yearsExperience = yearsExperience;
 	},
 	perform: function() {
-		//Emulate "super.MethodName()" by digging into the prototype of _super_
-		this._super_.prototype.perform.call(this);
+		//Emulate "super.MethodName()" by running "call()" on the Player's prototype functions
+		Player.prototype.perform.call(this);
+		//this._super_.prototype.perform.call(this); /*This also works since it will only traverse up one level*/
 		print("The expert " + this.instrument.name + " player, " + this.name + ", takes a bow.");
 	}
 });
