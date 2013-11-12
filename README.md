@@ -59,7 +59,7 @@ var MyClassChild = MyClass.extend({
 var myinstancechild = new MyClassChild(999);
 console.log(myinstancechild.bar); //Prints "^_^"
 console.log(myinstance.toString()); //Prints "Foo is 999"
-```_super_
+```
 In the above example, `MyClass` was extended by a new class called `MyClassChild` and given a new property called `bar`. By binding `this` to the `MyClass` prototype functions, we simulate the traditional OOP super() command. The parent function is called but within the context of `this` (where `this` is the instance of `MyClassChild`). And you can see we have direct access to the parent's `toString()` automatically since it was automatically passed down by OOPS.js.
 
 (Note: For super calls that only go up one level, you may call them without the class name like so:  `this._super_.prototype.myMethod.call(this, arg1, arg2...)`. Unfortunately `_super_` which is provided by OOPS.js can only traverse upward one level, since the context of `this._super_` becomes invalid after the first call)
