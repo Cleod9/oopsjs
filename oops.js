@@ -1,9 +1,9 @@
 /*******************************
 	OOPS Version 1.1.0
 	
-    A very simple "Object Oriented Programming Structured" class system for JavaScript
-	
-  	The MIT License (MIT)
+	A very simple "Object Oriented Programming Structured" class system for JavaScript
+
+	The MIT License (MIT)
 
 	Copyright (c) 2013 Greg McLeod <cleod9{at}gmail.com>
 
@@ -27,7 +27,7 @@
 *******************************/
 var OOPS = (function() {
 	//Constructor
-	function OOPS() {}; //Unique ID for doing Class type checks (comparable via OOPS.typeMatch())
+	function OOPS() {} //Unique ID for doing Class type checks (comparable via OOPS.typeMatch())
 	//Extender (copy all of the prototypes from parent to child)
 	OOPS._ID_ = 0;
 	OOPS.extend = function(props) {
@@ -44,7 +44,8 @@ var OOPS = (function() {
 		//Statics get placed onto the child itself
 		if(child.prototype._statics_) {
 			for(i in child.prototype._statics_)
-				child[i] = child.prototype._statics_[i];
+				if(child.prototype._statics_.hasOwnProperty(i))
+					child[i] = child.prototype._statics_[i];
 			//Remove _statics_ from the prototype
 			delete child.prototype._statics_;
 		}
