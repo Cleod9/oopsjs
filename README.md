@@ -92,9 +92,25 @@ OOPS.js comes with a couple of extra built in functions that you  can use:
 
 `OOPS.descendantOf(child, parent);` - Tests to see if the `child` is a descendant of `parent`. The values provided can either be class definitions, or instances of the class.
 
+And of course OOPS.js naturally supports the `instanceof` operator!
+
 ## Terms of Use ##
 
 Free to use in any projects without notifying me, nor is credit needed (though it'd be much appreciated!). Just do not re-distribute it under anyone else's name and be sure to retain the copyright notice in the source!
+
+## Version History ##
+
+**1.1.0**
+
+-Greatly simplified the setup structure by using standard JS practices
+-Replaced _parent_ property with _super_
+-No longer a need to specific the name of the parent class to call its constructor
+
+(95% backwards compatible with 1.0.0, just update your _super_ calls)
+
+**1.0.0**
+
+-Initial release
 
  
 ----------
