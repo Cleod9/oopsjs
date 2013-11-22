@@ -27,7 +27,7 @@
 *******************************/
 var OOPS = (function() {
 	//Constructor
-	function OOPS() {} //Unique ID for doing Class type checks (comparable via OOPS.typeMatch())
+	var OOPS = function() {}; //Unique ID for doing Class type checks (comparable via OOPS.typeMatch())
 	//Extender (copy all of the prototypes from parent to child)
 	OOPS._ID_ = 0;
 	OOPS.extend = function(props) {

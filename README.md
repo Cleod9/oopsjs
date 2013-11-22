@@ -102,13 +102,16 @@ Free to use in any projects without notifying me, nor is credit needed (though i
 
 ## Version History ##
 
+**1.1.1**
+
+- Minor syntax change
+
 **1.1.0**
 
 - Greatly simplified the setup structure by using standard JS practices
-- Replaced _parent_ property with _super_
-- No longer a need to specific the name of the parent class to call its constructor
+- Replaced `_parent_` property with `_super_`
 
-(95% backwards compatible with 1.0.0, just update your _super_ calls)
+(99% backwards compatible with 1.0.0)
 
 **1.0.0**
 
