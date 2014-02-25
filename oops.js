@@ -1,5 +1,5 @@
 /*******************************
-	OOPS Version 1.1.0
+	OOPS Version 1.1.2
 	
 	A very simple "Object Oriented Programming Structured" class system for JavaScript
 

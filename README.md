@@ -102,6 +102,10 @@ Free to use in any projects without notifying me, nor is credit needed (though i
 
 ## Version History ##
 
+**1.1.2**
+
+- Readme update (Node.js)
+
 **1.1.1**
 
 - Minor syntax change
